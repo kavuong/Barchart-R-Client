@@ -25,6 +25,9 @@ ui <- fluidPage(
       "Equities",
       sidebarLayout(
         sidebarPanel(
+          tags$div(class="header", checked=NA,
+                   tags$p("Find data on your favorite stocks here! Simply input a correct stock symbol, the timeframe of data desired, and what characteristic you want your data about (price in USD or volume). "),
+          ),
           textInput("stockChosen", h3("Stock Quote (ex. AAPL)")),
           selectInput("selectTimeEquity", h3("Time"),
             choices = list("1D", "5D", "1M", "3M", "6M")
@@ -52,6 +55,9 @@ ui <- fluidPage(
       "Futures",
       sidebarLayout(
         sidebarPanel(
+          tags$div(class="header", checked=NA,
+                   tags$p("Find data on your favorite futures here! Simply input a correct future symbol, the timeframe of data desired, and what characteristic you want your data about (price in USD or volume). "),
+          ),
           textInput("futureChosen", h3("Future Quote (ex. CL)")),
           selectInput("selectTimeFuture", h3("Time"),
             choices = list("1D", "5D", "1M", "3M", "6M")
@@ -79,6 +85,8 @@ ui <- fluidPage(
       "Forex",
       sidebarLayout(
         sidebarPanel(
+          tags$div(class="header", checked=NA,
+                   tags$p("Find data on your favorite currencies here! You can also find how much a currency is worth in another. Simply input the timeframe of data desired, the base currency and the amount, the target currency and the type of data desired (exchange rate in base : target currency ratio and volume traded).")),
           selectInput("selectTimeForex", h3("Time"),
             choices = list("1D", "5D", "1M", "3M", "6M")
           ),
@@ -91,7 +99,7 @@ ui <- fluidPage(
           ),
           textOutput("forexResult"),
           selectInput("selectFormatForex", h3("Data"),
-            choices = list("Price($)", "Volume")
+            choices = list("Price(From:To)", "Volume")
           ),
           actionButton("submitForex", "Submit")
         ),
@@ -564,7 +572,7 @@ server <- function(input, output) {
 
     ex.display <- paste(input$currencyFrom, ":", input$currencyTo, sep = "")
 
-    if (chosenForex()["SelectFormatForex"] == "Price($)") {
+    if (chosenForex()["SelectFormatForex"] == "Price(From:To)") {
       output$forexPlot <- renderPlot({
         ggplot(data.to.display, aes(x = as.character(timestamp), y = open, group = 1)) +
           geom_line() +
